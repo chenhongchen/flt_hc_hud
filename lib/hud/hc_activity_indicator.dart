@@ -16,13 +16,11 @@ const double _kDefaultIndicatorRadius = 10.0;
 class HCActivityIndicator extends StatefulWidget {
   /// Creates an iOS-style activity indicator.
   const HCActivityIndicator(
-      {Key key,
+      {Key? key,
       this.animating = true,
       this.radius = _kDefaultIndicatorRadius,
-      this.color = _kActiveTickColor})
-      : assert(animating != null),
-        assert(radius != null),
-        assert(radius > 0),
+      this.color = kActiveTickColor})
+      : assert(radius > 0),
         super(key: key);
 
   /// Whether the activity indicator is running its animation.
@@ -43,7 +41,7 @@ class HCActivityIndicator extends StatefulWidget {
 
 class _HCActivityIndicatorState extends State<HCActivityIndicator>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
+  late AnimationController _controller;
 
   @override
   void initState() {
@@ -90,13 +88,13 @@ const double _kTwoPI = math.pi * 2.0;
 const int _kTickCount = 12;
 const int _kHalfTickCount = _kTickCount ~/ 2;
 const Color _kTickColor = CupertinoColors.lightBackgroundGray;
-const Color _kActiveTickColor = Color(0xFF1F93EA);
+const Color kActiveTickColor = Color(0xFF1F93EA);
 
 class _CupertinoActivityIndicatorPainter extends CustomPainter {
   _CupertinoActivityIndicatorPainter({
-    this.position,
-    this.color = _kActiveTickColor,
-    double radius,
+    required this.position,
+    this.color = kActiveTickColor,
+    required double radius,
   })  : tickFundamentalRRect = RRect.fromLTRBXY(
           -radius,
           1.0 * radius / _kDefaultIndicatorRadius,
@@ -123,7 +121,7 @@ class _CupertinoActivityIndicatorPainter extends CustomPainter {
     for (int i = 0; i < _kTickCount; ++i) {
       final double t =
           (((i + activeTick) % _kTickCount) / _kHalfTickCount).clamp(0.0, 1.0);
-      paint.color = Color.lerp(color, _kTickColor, t);
+      paint.color = Color.lerp(color, _kTickColor, t) ?? color;
       canvas.drawRRect(tickFundamentalRRect, paint);
       canvas.rotate(-_kTwoPI / _kTickCount);
     }
