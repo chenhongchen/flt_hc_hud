@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/scheduler.dart';
-import 'circle_progressbar.dart';
+import 'hc_progressbar.dart';
 import 'hc_activity_indicator.dart';
 
 enum HCHudType {
@@ -388,7 +388,7 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
             Icon(Icons.check, color: widget.foreColor, size: kIconSize));
       case HCHudType.progress:
         var progressWidget = CustomPaint(
-          painter: CircleProgressBarPainter(progress: _progressValue),
+          painter: HCProgressBarPainter(progress: _progressValue),
           size: Size(kIconSize, kIconSize),
         );
         return _createHudView(progressWidget);
