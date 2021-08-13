@@ -1,12 +1,12 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
-class CircleProgressBarPainter extends CustomPainter {
+class HCProgressBarPainter extends CustomPainter {
   final double progress;
   final double strokeWidth;
   final Color color;
   final Color fillColor;
-  const CircleProgressBarPainter(
+  const HCProgressBarPainter(
       {this.progress = 0,
       this.strokeWidth = 3,
       this.color = Colors.grey,
