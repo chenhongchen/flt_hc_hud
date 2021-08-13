@@ -103,7 +103,7 @@ class ListCell extends StatelessWidget {
         HCHud.of(context).showTextAndDismiss(
           enable: true,
           text:
-              '点击 $index cell 显示${showMilliseconds / 1000}消失\n的的地方就搞得阿卡丽就发流口水的积分卡介绍分类会计法上来的放进来会计法',
+              '点击 $index cell 显示(${showMilliseconds ~/ 1000}秒)消失\n的的地方就搞得阿卡丽就发流口水的积分卡介绍分类会计法上来的放进来会计法',
           showMilliseconds: showMilliseconds,
         );
       },
