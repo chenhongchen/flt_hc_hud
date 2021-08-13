@@ -67,7 +67,7 @@ class Page extends StatelessWidget {
         color: Colors.white,
         child: Column(
           children: <Widget>[
-            Image.asset('images/list.png'),
+            Expanded(child: Image.asset('images/list.png')),
           ],
         ),
       ),
