@@ -98,9 +98,13 @@ class ListCell extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         debugPrint('tap list ----------');
+        int i = index % 2;
+        int showMilliseconds = (i == 0 ? 2000 : 4000);
         HCHud.of(context).showTextAndDismiss(
-            enable: true,
-            text: '点击 $index cell  的房价肯定解放军阿卡丽就发流口水的积分卡介绍分类会计法上来的放进来会计法');
+          enable: true,
+          text: '点击 $index cell  的房价肯定解放军阿卡丽就发流口水的积分卡介绍分类会计法上来的放进来会计法',
+          showMilliseconds: showMilliseconds,
+        );
       },
       child: Container(
         color: Colors.transparent,

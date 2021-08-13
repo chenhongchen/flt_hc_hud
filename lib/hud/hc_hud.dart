@@ -88,6 +88,9 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
 
   bool _animated = true;
 
+  int _lastShowStartTimeStamp = 0;
+  final int _showMilliseconds = 2000;
+
   @override
   void initState() {
     _animation = AnimationController(
@@ -250,14 +253,16 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
       double width,
       double height,
       bool enable = true,
-      bool animated}) async {
+      bool animated,
+      int showMilliseconds}) async {
     await this.showAndDismiss(HCHudType.success, text,
         x: x,
         y: y,
         width: width,
         height: height,
         enable: enable,
-        animated: animated);
+        animated: animated,
+        showMilliseconds: showMilliseconds);
   }
 
   /// show error icon with text and dismiss automatic
@@ -268,14 +273,16 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
       double width,
       double height,
       bool enable = true,
-      bool animated}) async {
+      bool animated,
+      int showMilliseconds}) async {
     await this.showAndDismiss(HCHudType.error, text,
         x: x,
         y: y,
         width: width,
         height: height,
         enable: enable,
-        animated: animated);
+        animated: animated,
+        showMilliseconds: showMilliseconds);
   }
 
   /// show text only and dismiss automatic
@@ -286,14 +293,16 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
       double width,
       double height,
       bool enable = true,
-      bool animated}) async {
+      bool animated,
+      int showMilliseconds}) async {
     await this.showAndDismiss(HCHudType.text, text,
         x: x,
         y: y,
         width: width,
         height: height,
         enable: enable,
-        animated: animated);
+        animated: animated,
+        showMilliseconds: showMilliseconds);
   }
 
   /// show loading with text
@@ -324,7 +333,8 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
       double height,
       Widget hudView,
       bool enable = true,
-      bool animated}) async {
+      bool animated,
+      int showMilliseconds}) async {
     if (hudView == null) return;
     _customHudView = hudView;
     await this.showAndDismiss(HCHudType.custom, '',
@@ -333,7 +343,8 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
         width: width,
         height: height,
         enable: enable,
-        animated: animated);
+        animated: animated,
+        showMilliseconds: showMilliseconds);
   }
 
   /// update progress value and text when ProgressHudType = progress
@@ -353,7 +364,10 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
       double width,
       double height,
       bool enable = true,
-      bool animated}) async {
+      bool animated,
+      int showMilliseconds}) async {
+    dismiss(animated: false);
+    _lastShowStartTimeStamp = DateTime.now().millisecondsSinceEpoch;
     show(type, text,
         x: x,
         y: y,
@@ -362,8 +376,14 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
         enable: enable,
         animated: animated);
 //    var millisecond = max(500 + text.length * 200, 1000);
-    var duration = Duration(milliseconds: 2000);
+    showMilliseconds ??= _showMilliseconds;
+    var duration = Duration(milliseconds: showMilliseconds);
     await Future.delayed(duration);
+
+    int curTimeStamp = DateTime.now().millisecondsSinceEpoch;
+    if (curTimeStamp - _lastShowStartTimeStamp < showMilliseconds) {
+      return;
+    }
     dismiss(animated: animated);
   }
 
