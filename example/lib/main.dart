@@ -58,7 +58,7 @@ class Page extends StatelessWidget {
 
   _onTapBtn(BuildContext context) async {
     double y = MediaQuery.of(context).padding.top + 55;
-    HCHud.of(context).showCustomHudView(
+    HCHud.of(context)?.showCustomHudView(
       animated: true,
       y: y,
       hudView: Container(
@@ -86,7 +86,7 @@ class Page extends StatelessWidget {
 //    });
     await Future.delayed(Duration(seconds: 2));
 //    HCHud.of(context).showErrorAndDismiss(text: '加载数据异常');
-    HCHud.of(context).dismiss(animated: false);
+    HCHud.of(context)?.dismiss(animated: false);
   }
 }
 
@@ -100,7 +100,7 @@ class ListCell extends StatelessWidget {
         debugPrint('tap list ----------');
         int i = index % 2;
         int showMilliseconds = (i == 0 ? 2000 : 4000);
-        HCHud.of(context).showTextAndDismiss(
+        HCHud.of(context)?.showTextAndDismiss(
           enable: true,
           text:
               '点击 $index cell 显示(${showMilliseconds ~/ 1000}秒)消失\n的的地方就搞得阿卡丽就发流口水的积分卡介绍分类会计法上来的放进来会计法',
