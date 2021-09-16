@@ -65,7 +65,7 @@ class HCHud extends StatefulWidget {
 }
 
 class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
-  late AnimationController _animation;
+  AnimationController? _animation;
   var _isVisible = false;
   var _text = "";
   var _opacity = 0.0;
@@ -98,7 +98,7 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
         duration: const Duration(milliseconds: 200), vsync: this)
       ..addListener(() {
         setState(() {
-          _opacity = _animation.value;
+          _opacity = _animation?.value ?? 0.0;
         });
       })
       ..addStatusListener((status) {
@@ -155,7 +155,8 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
 
   @override
   void dispose() {
-    _animation.dispose();
+    _animation?.dispose();
+    _animation = null;
     super.dispose();
   }
 
@@ -164,7 +165,7 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
     _isVisible = false;
     _opacity = 0.0;
     if (animated ?? true) {
-      _animation.reverse();
+      _animation?.reverse();
     }
     setState(() {});
   }
@@ -196,8 +197,8 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
           if (y != null) {
             _y = y;
             if (_animated) {
-              _animation.reset();
-              _animation.forward();
+              _animation?.reset();
+              _animation?.forward();
             } else {
               _opacity = 1.0;
             }
@@ -217,8 +218,8 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
       if (y != null) {
         _y = y;
         if (_animated) {
-          _animation.reset();
-          _animation.forward();
+          _animation?.reset();
+          _animation?.forward();
         } else {
           _opacity = 1.0;
         }
@@ -504,8 +505,8 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
 
       if (_isVisible) {
         if (_animated) {
-          _animation.reset();
-          _animation.forward();
+          _animation?.reset();
+          _animation?.forward();
         } else {
           _opacity = 1.0;
         }
