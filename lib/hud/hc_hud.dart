@@ -51,9 +51,9 @@ class HCHud extends StatefulWidget {
     }
   }
 
-  static _HCHudState of(BuildContext context) {
+  static _HCHudState of(BuildContext? context) {
     var hudState = _HCHudState();
-    if(context == null) return hudState;
+    if (context == null) return hudState;
     try {
       hudState =
           context.findAncestorStateOfType<_HCHudState>() ?? _HCHudState();
