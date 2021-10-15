@@ -52,7 +52,7 @@ class HCHud extends StatefulWidget {
 
   static _HCHudState of(BuildContext context) {
     var hudState = _HCHudState();
-    if(context == null) return hudState;
+    if (context == null) return hudState;
     try {
       hudState =
           context.findAncestorStateOfType<_HCHudState>() ?? _HCHudState();
@@ -92,16 +92,24 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
   int _lastShowStartTimeStamp = 0;
   final int _showMilliseconds = 2000;
 
+  bool _disposed = false;
+
   @override
   void initState() {
     _animation = AnimationController(
         duration: const Duration(milliseconds: 200), vsync: this)
       ..addListener(() {
+        if (_disposed) {
+          return;
+        }
         setState(() {
           _opacity = _animation.value;
         });
       })
       ..addStatusListener((status) {
+        if (_disposed) {
+          return;
+        }
         if (status == AnimationStatus.dismissed) {
           setState(() {});
         }
@@ -155,6 +163,7 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
 
   @override
   void dispose() {
+    _disposed = true;
     _animation.dispose();
     _animation = null;
     super.dispose();
@@ -162,6 +171,9 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
 
   /// dismiss hud
   void dismiss({bool animated}) {
+    if (_disposed) {
+      return;
+    }
     _isVisible = false;
     _opacity = 0.0;
     if (animated ?? true) {
@@ -178,6 +190,9 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
       double height,
       bool enable = true,
       bool animated}) {
+    if (_disposed) {
+      return;
+    }
     _setDefSize();
     _isVisible = true;
     _enable = enable ?? true;
@@ -352,6 +367,9 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
   ///
   /// should call `show(ProgressHudType.progress, "Loading")` before use
   void updateProgress(double progress, String text) {
+    if (_disposed) {
+      return;
+    }
     setState(() {
       _progressValue = progress;
       _text = text;
@@ -367,6 +385,9 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
       bool enable = true,
       bool animated,
       int showMilliseconds}) async {
+    if (_disposed) {
+      return;
+    }
     dismiss(animated: false);
     _lastShowStartTimeStamp = DateTime.now().millisecondsSinceEpoch;
     show(type, text,
@@ -497,6 +518,9 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
 
   _showAtHeightCenter() {
     Future.delayed(Duration(milliseconds: 100), () {
+      if (_disposed) {
+        return;
+      }
       double hudH = _globalKey?.currentContext?.size?.height ?? 0;
       _y = (_widgetH - hudH) * 0.5;
 
