@@ -201,7 +201,7 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
     _enable = enable;
     _animated = animated ?? true;
     if ((width == null || height == null) && (_defW <= 0 || _defH <= 0)) {
-      SchedulerBinding.instance?.addPostFrameCallback((_) {
+      Future.delayed(Duration(seconds: 0), () {
         _setDefSize();
         if (_isVisible) {
           _text = text;
