@@ -1,6 +1,5 @@
 import 'package:flt_hc_hud/flt_hc_hud.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
 
 void main() => runApp(MyApp());
 
@@ -59,36 +58,38 @@ class Page extends StatelessWidget {
   }
 
   _onTapBtn(BuildContext context) async {
-    double y = MediaQuery.of(context).padding.top + 55;
-    HCHud.of(context)?.showCustomHudView(
+    double y = MediaQuery.of(context).padding.top + 64;
+
+    // HCHud.of(context)?.showCustomHudView(
+    //   animated: true,
+    //   y: y,
+    //   hudView: Container(
+    //     width: MediaQuery.of(context).size.width,
+    //     height: MediaQuery.of(context).size.height,
+    //     color: Colors.white,
+    //     child: Column(
+    //       children: <Widget>[
+    //         Expanded(child: Image.asset('images/list.png')),
+    //       ],
+    //     ),
+    //   ),
+    // );
+
+    // HCHud.of(context)?.showLoading(text: '', enable: false);
+
+//     await Future.delayed(Duration(seconds: 2));
+//    HCHud.of(context).showErrorAndDismiss(text: '加载数据异常');
+//     HCHud.of(context)?.dismiss(animated: false);
+
+    HCHud.of(context)?.showCustomHudViewAndDismiss(
       animated: true,
       y: y,
       hudView: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        color: Colors.white,
-        child: Column(
-          children: <Widget>[
-            Expanded(child: Image.asset('images/list.png')),
-          ],
-        ),
+        child: Image.asset('images/list.png'),
       ),
     );
-//    HCHud.of(context).showCustomHudViewAndDismiss(
-//        animated: false,
-//        y: MediaQuery.of(context).padding.top + 64,
-//        hudView: Container(
-//          width: MediaQuery.of(context).size.width,
-//          height: MediaQuery.of(context).size.height,
-//          child: Image.asset('images/list.png'),
-//        ));
-//    HCHud.of(context).showLoading(text: '', enable: false);
-//    Future.delayed(Duration(milliseconds: 500), () {
-//      HCHud.of(context).dismiss();
-//    });
-    await Future.delayed(Duration(seconds: 2));
-//    HCHud.of(context).showErrorAndDismiss(text: '加载数据异常');
-    HCHud.of(context)?.dismiss(animated: false);
   }
 }
 

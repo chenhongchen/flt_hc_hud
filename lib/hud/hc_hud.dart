@@ -503,7 +503,7 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
     double h = MediaQuery.of(context).size.height;
     if (widget.width is double && (widget.width ?? 0) > 0) {
       _defW = widget.width!;
-    } else if (w is double && w > 0) {
+    } else if (w > 0) {
       _defW = w;
     } else {
       _defW = 0;
@@ -511,7 +511,7 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
 
     if (widget.height is double && (widget.height ?? 0) > 0) {
       _defH = widget.height!;
-    } else if (h is double && h > 0) {
+    } else if (h > 0) {
       _defH = h;
     } else {
       _defH = 0;
