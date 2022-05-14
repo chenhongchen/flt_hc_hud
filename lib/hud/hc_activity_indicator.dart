@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 import 'dart:math' as math;
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 const double _kDefaultIndicatorRadius = 10.0;

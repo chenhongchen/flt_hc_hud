@@ -29,7 +29,9 @@ class _MyAppState extends State<MyApp> {
 
 class Page extends StatelessWidget {
   final String platformVersion;
+
   Page(this.platformVersion);
+
   @override
   Widget build(BuildContext context) {
     List<Widget> childs = [];
@@ -92,7 +94,9 @@ class Page extends StatelessWidget {
 
 class ListCell extends StatelessWidget {
   final int index;
+
   ListCell(this.index);
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

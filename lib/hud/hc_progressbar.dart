@@ -6,6 +6,7 @@ class HCProgressBarPainter extends CustomPainter {
   final double strokeWidth;
   final Color color;
   final Color fillColor;
+
   const HCProgressBarPainter(
       {this.progress = 0,
       this.strokeWidth = 3,

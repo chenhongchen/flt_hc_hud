@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/scheduler.dart';
 import 'hc_progressbar.dart';
 import 'hc_activity_indicator.dart';
 
@@ -26,9 +24,9 @@ enum HCHudType {
 
 class HCHud extends StatefulWidget {
   final Widget child;
-  Color? bgColor;
-  Color? foreColor;
-  Color? textColor;
+  final Color? bgColor;
+  final Color? foreColor;
+  final Color? textColor;
   final double? width;
   final double? height;
 
@@ -39,17 +37,7 @@ class HCHud extends StatefulWidget {
     this.textColor,
     this.width,
     this.height,
-  }) {
-    if (this.bgColor == null) {
-      this.bgColor = Color(0xFFF6F6F6);
-    }
-    if (this.foreColor == null) {
-      this.foreColor = Color(0xFF1F93EA);
-    }
-    if (this.textColor == null) {
-      this.textColor = Color(0XFF666666);
-    }
-  }
+  });
 
   static _HCHudState? of(BuildContext? context) {
     _HCHudState? hudState;
@@ -94,8 +82,19 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
 
   bool _disposed = false;
 
+  late Color _bgColor;
+  late Color _foreColor;
+  late Color _textColor;
+
+  void _initData() {
+    _bgColor = widget.bgColor ?? Color(0xFFF6F6F6);
+    _foreColor = widget.foreColor ?? Color(0xFF1F93EA);
+    _textColor = widget.textColor ?? Color(0XFF666666);
+  }
+
   @override
   void initState() {
+    _initData();
     _animation = AnimationController(
         duration: const Duration(milliseconds: 200), vsync: this)
       ..addListener(() {
@@ -422,15 +421,15 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
             child: HCActivityIndicator(
               animating: true,
               radius: 10,
-              color: widget.foreColor ?? Color(0xFF1F93EA),
+              color: _foreColor,
             ));
         return _createHudView(sizeBox);
       case HCHudType.error:
         return _createHudView(
-            Icon(Icons.close, color: widget.foreColor, size: kIconSize));
+            Icon(Icons.close, color: _foreColor, size: kIconSize));
       case HCHudType.success:
         return _createHudView(
-            Icon(Icons.check, color: widget.foreColor, size: kIconSize));
+            Icon(Icons.check, color: _foreColor, size: kIconSize));
       case HCHudType.progress:
         var progressWidget = CustomPaint(
           painter: HCProgressBarPainter(progress: _progressValue),
@@ -449,7 +448,7 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
       child: Container(
         margin: EdgeInsets.fromLTRB(_hMargin, 0, _hMargin, 0),
         decoration: BoxDecoration(
-            color: widget.bgColor,
+            color: _bgColor,
             /*Color.fromARGB(255, 33, 33, 33)*/
             borderRadius: BorderRadius.circular(20)),
         constraints: BoxConstraints(minHeight: 50, minWidth: 50),
@@ -468,7 +467,7 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
           child: Text(_text,
               textAlign: TextAlign.center,
               style: TextStyle(
-                  color: widget.textColor,
+                  color: _textColor,
                   fontSize: 16,
                   fontWeight: FontWeight.normal,
                   decoration: TextDecoration.none)));
@@ -484,7 +483,7 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
             child: Text(_text,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    color: widget.textColor,
+                    color: _textColor,
                     fontSize: 16,
                     fontWeight: FontWeight.normal,
                     decoration: TextDecoration.none)),
