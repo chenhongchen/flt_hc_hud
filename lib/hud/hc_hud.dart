@@ -505,7 +505,7 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
 
   void _setDefSize() {
     double w = _constraints?.maxWidth ?? MediaQuery.of(context).size.width;
-    double h = _constraints?.maxWidth ?? MediaQuery.of(context).size.height;
+    double h = _constraints?.maxHeight ?? MediaQuery.of(context).size.height;
     if (widget.width is double && (widget.width ?? 0) > 0) {
       _defW = widget.width!;
     } else if (w > 0) {
