@@ -67,6 +67,7 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
 
   double _defW = 0;
   double _defH = 0;
+  BoxConstraints? _constraints;
 
   final GlobalKey _globalKey = GlobalKey();
   final double _hMargin = 30;
@@ -124,40 +125,44 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        widget.child,
-        (_opacity == 0.0
-            ? Container(
-                width: 0,
-                height: 0,
-              )
-            : Positioned(
-                left: _x,
-                top: _y,
-                child: Opacity(
-                  opacity: _opacity,
-                  child: _enable
-                      ? Container(
-                          key: _globalKey,
-                          width: _widgetW,
-                          color: Colors.transparent,
-                          child: _progressType == HCHudType.custom
-                              ? _customHudView
-                              : _createHud(),
-                        )
-                      : Container(
-                          key: _globalKey,
-                          width: _widgetW,
-                          height: _widgetH,
-                          color: Colors.transparent,
-                          child: _progressType == HCHudType.custom
-                              ? _customHudView
-                              : _createHud(),
-                        ),
-                ))),
-      ],
-    );
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+      _constraints = constraints;
+      return Stack(
+        children: <Widget>[
+          widget.child,
+          (_opacity == 0.0
+              ? Container(
+                  width: 0,
+                  height: 0,
+                )
+              : Positioned(
+                  left: _x,
+                  top: _y,
+                  child: Opacity(
+                    opacity: _opacity,
+                    child: _enable
+                        ? Container(
+                            key: _globalKey,
+                            width: _widgetW,
+                            color: Colors.transparent,
+                            child: _progressType == HCHudType.custom
+                                ? _customHudView
+                                : _createHud(),
+                          )
+                        : Container(
+                            key: _globalKey,
+                            width: _widgetW,
+                            height: _widgetH,
+                            color: Colors.transparent,
+                            child: _progressType == HCHudType.custom
+                                ? _customHudView
+                                : _createHud(),
+                          ),
+                  ))),
+        ],
+      );
+    });
   }
 
   @override
@@ -499,8 +504,8 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
   }
 
   void _setDefSize() {
-    double w = MediaQuery.of(context).size.width;
-    double h = MediaQuery.of(context).size.height;
+    double w = _constraints?.maxWidth ?? MediaQuery.of(context).size.width;
+    double h = _constraints?.maxWidth ?? MediaQuery.of(context).size.height;
     if (widget.width is double && (widget.width ?? 0) > 0) {
       _defW = widget.width!;
     } else if (w > 0) {
