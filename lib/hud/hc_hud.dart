@@ -66,10 +66,12 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
   var _progressType = HCHudType.loading;
   var _progressValue = 0.0;
 
-  double? _x;
-  double? _y;
+  double? _left;
+  double? _top;
   double? _widgetW;
   double? _widgetH;
+  double? _right;
+  double? _bottom;
 
   double _defW = 0;
   double _defH = 0;
@@ -144,8 +146,10 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
                   height: 0,
                 )
               : Positioned(
-                  left: _x,
-                  top: _y,
+                  left: _left,
+                  top: _top,
+                  right: _right,
+                  bottom: _bottom,
                   child: Opacity(
                     opacity: _opacity,
                     child: _enable
@@ -197,10 +201,12 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
   void show(
     HCHudType type,
     String text, {
-    double? x,
-    double? y,
+    double? left,
+    double? top,
     double? width,
     double? height,
+    double? right,
+    double? bottom,
     bool enable = true,
     bool? animated,
   }) {
@@ -220,17 +226,25 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
           _progressType = type;
           _widgetW = width != null ? width : _defW;
           _widgetH = height != null ? height : _defH;
-          _x = x ?? ((MediaQuery.of(context).size.width - _widgetW!) * 0.5);
-          if (y != null) {
-            _y = y;
-            if (_animated) {
-              _animation?.forward();
+          _left = left;
+          _right = right;
+          _top = top;
+          _bottom = bottom;
+          if (right == null) {
+            _left =
+                left ?? ((MediaQuery.of(context).size.width - _widgetW!) * 0.5);
+          }
+          if (bottom == null) {
+            if (_top != null) {
+              if (_animated) {
+                _animation?.forward();
+              } else {
+                _opacity = 1.0;
+              }
             } else {
-              _opacity = 1.0;
+              _opacity = 0.001;
+              _showAtHeightCenter(_widgetH!);
             }
-          } else {
-            _opacity = 0.001;
-            _showAtHeightCenter(_widgetH!);
           }
           setState(() {});
         }
@@ -240,9 +254,11 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
       _progressType = type;
       _widgetW = width != null ? width : _defW;
       _widgetH = height != null ? height : _defH;
-      _x = x ?? ((MediaQuery.of(context).size.width - _widgetW!) * 0.5);
-      if (y != null) {
-        _y = y;
+      _left = left ?? ((MediaQuery.of(context).size.width - _widgetW!) * 0.5);
+      _right = right;
+      _bottom = bottom;
+      if (top != null || bottom != null) {
+        _top = top;
         if (_animated) {
           _animation?.forward();
         } else {
@@ -259,123 +275,164 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
   /// show loading with text
   void showLoading(
       {String text = "loading",
-      double? x,
-      double? y,
+      double? left,
+      double? top,
       double? width,
       double? height,
+      double? right,
+      double? bottom,
       Widget? hudView,
       bool enable = true,
       bool? animated}) {
     _loadingHudView = hudView;
-    this.show(HCHudType.loading, text,
-        x: x,
-        y: y,
-        width: width,
-        height: height,
-        enable: enable,
-        animated: animated);
+    this.show(
+      HCHudType.loading,
+      text,
+      left: left,
+      top: top,
+      width: width,
+      height: height,
+      right: right,
+      bottom: bottom,
+      enable: enable,
+      animated: animated,
+    );
   }
 
   /// show success icon with text and dismiss automatic
-  Future showSuccessAndDismiss(
-      {String text = '',
-      double? x,
-      double? y,
-      double? width,
-      double? height,
-      bool enable = true,
-      bool? animated,
-      int? showMilliseconds}) async {
+  Future showSuccessAndDismiss({
+    String text = '',
+    double? left,
+    double? top,
+    double? width,
+    double? height,
+    double? right,
+    double? bottom,
+    bool enable = true,
+    bool? animated,
+    int? showMilliseconds,
+  }) async {
     await this.showAndDismiss(HCHudType.success, text,
-        x: x,
-        y: y,
+        left: left,
+        top: top,
         width: width,
         height: height,
+        right: right,
+        bottom: bottom,
         enable: enable,
         animated: animated,
         showMilliseconds: showMilliseconds);
   }
 
   /// show error icon with text and dismiss automatic
-  Future showErrorAndDismiss(
-      {String text = '',
-      double? x,
-      double? y,
-      double? width,
-      double? height,
-      bool enable = true,
-      bool? animated,
-      int? showMilliseconds}) async {
-    await this.showAndDismiss(HCHudType.error, text,
-        x: x,
-        y: y,
-        width: width,
-        height: height,
-        enable: enable,
-        animated: animated,
-        showMilliseconds: showMilliseconds);
+  Future showErrorAndDismiss({
+    String text = '',
+    double? left,
+    double? top,
+    double? width,
+    double? height,
+    double? right,
+    double? bottom,
+    bool enable = true,
+    bool? animated,
+    int? showMilliseconds,
+  }) async {
+    await this.showAndDismiss(
+      HCHudType.error,
+      text,
+      left: left,
+      top: top,
+      width: width,
+      height: height,
+      right: right,
+      bottom: bottom,
+      enable: enable,
+      animated: animated,
+      showMilliseconds: showMilliseconds,
+    );
   }
 
   /// show text only and dismiss automatic
-  Future showTextAndDismiss(
-      {String text = '',
-      double? x,
-      double? y,
-      double? width,
-      double? height,
-      bool enable = true,
-      bool? animated,
-      int? showMilliseconds}) async {
-    await this.showAndDismiss(HCHudType.text, text,
-        x: x,
-        y: y,
-        width: width,
-        height: height,
-        enable: enable,
-        animated: animated,
-        showMilliseconds: showMilliseconds);
+  Future showTextAndDismiss({
+    String text = '',
+    double? left,
+    double? top,
+    double? width,
+    double? height,
+    double? right,
+    double? bottom,
+    bool enable = true,
+    bool? animated,
+    int? showMilliseconds,
+  }) async {
+    await this.showAndDismiss(
+      HCHudType.text,
+      text,
+      left: left,
+      top: top,
+      width: width,
+      height: height,
+      right: right,
+      bottom: bottom,
+      enable: enable,
+      animated: animated,
+      showMilliseconds: showMilliseconds,
+    );
   }
 
   /// show loading with text
-  void showCustomHudView(
-      {double? x,
-      double? y,
-      double? width,
-      double? height,
-      Widget? hudView,
-      bool enable = true,
-      bool? animated}) {
+  void showCustomHudView({
+    double? left,
+    double? top,
+    double? width,
+    double? height,
+    double? right,
+    double? bottom,
+    Widget? hudView,
+    bool enable = true,
+    bool? animated,
+  }) {
     if (hudView == null) return;
     _customHudView = hudView;
     this.show(HCHudType.custom, '',
-        x: x,
-        y: y,
+        left: left,
+        top: top,
         width: width,
         height: height,
+        right: right,
+        bottom: bottom,
         enable: enable,
         animated: animated);
   }
 
   /// show text only and dismiss automatic
-  Future showCustomHudViewAndDismiss(
-      {double? x,
-      double? y,
-      double? width,
-      double? height,
-      Widget? hudView,
-      bool enable = true,
-      bool? animated,
-      int? showMilliseconds}) async {
+  Future showCustomHudViewAndDismiss({
+    double? left,
+    double? top,
+    double? width,
+    double? height,
+    double? right,
+    double? bottom,
+    Widget? hudView,
+    bool enable = true,
+    bool? animated,
+    int? showMilliseconds,
+  }) async {
     if (hudView == null) return;
     _customHudView = hudView;
-    await this.showAndDismiss(HCHudType.custom, '',
-        x: x,
-        y: y,
-        width: width,
-        height: height,
-        enable: enable,
-        animated: animated,
-        showMilliseconds: showMilliseconds);
+    await this.showAndDismiss(
+      HCHudType.custom,
+      '',
+      left: left,
+      top: top,
+      width: width,
+      height: height,
+      right: right,
+      bottom: bottom,
+      enable: enable,
+      animated: animated,
+      showMilliseconds: showMilliseconds,
+    );
   }
 
   /// update progress value and text when ProgressHudType = progress
@@ -392,26 +449,36 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
   }
 
   /// show hud and dismiss automatically
-  Future showAndDismiss(HCHudType type, String text,
-      {double? x,
-      double? y,
-      double? width,
-      double? height,
-      bool enable = true,
-      bool? animated,
-      int? showMilliseconds}) async {
+  Future showAndDismiss(
+    HCHudType type,
+    String text, {
+    double? left,
+    double? top,
+    double? width,
+    double? height,
+    double? right,
+    double? bottom,
+    bool enable = true,
+    bool? animated,
+    int? showMilliseconds,
+  }) async {
     if (_disposed) {
       return;
     }
     dismiss(animated: false);
     _lastShowStartTimeStamp = DateTime.now().millisecondsSinceEpoch;
-    show(type, text,
-        x: x,
-        y: y,
-        width: width,
-        height: height,
-        enable: enable,
-        animated: animated);
+    show(
+      type,
+      text,
+      left: left,
+      top: top,
+      width: width,
+      height: height,
+      right: right,
+      bottom: bottom,
+      enable: enable,
+      animated: animated,
+    );
 //    var millisecond = max(500 + text.length * 200, 1000);
     showMilliseconds ??= _showMilliseconds;
     var duration = Duration(milliseconds: showMilliseconds);
@@ -532,7 +599,7 @@ class _HCHudState extends State<HCHud> with SingleTickerProviderStateMixin {
       }
       _animation?.reset();
       double hudH = _globalKey.currentContext?.size?.height ?? 0;
-      _y = (widgetH - hudH) * 0.5;
+      _top = (widgetH - hudH) * 0.5;
       if (_isVisible) {
         if (_animated) {
           _animation?.forward();

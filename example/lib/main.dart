@@ -79,14 +79,14 @@ class Page extends StatelessWidget {
     //   ),
     // );
 
-    HCHud.of(context)?.showLoading(
-      enable: false,
-      hudView: SizedBox(
-        width: 40,
-        height: 40,
-        child: SpinKitRing(color: Colors.black, lineWidth: 1),
-      ),
-    );
+    // HCHud.of(context)?.showLoading(
+    //   enable: false,
+    //   hudView: SizedBox(
+    //     width: 40,
+    //     height: 40,
+    //     child: SpinKitRing(color: Colors.black, lineWidth: 1),
+    //   ),
+    // );
 
 //     await Future.delayed(Duration(seconds: 2));
 //    HCHud.of(context).showErrorAndDismiss(text: '加载数据异常');
@@ -101,6 +101,16 @@ class Page extends StatelessWidget {
     //     child: Image.asset('images/list.png'),
     //   ),
     // );
+
+    HCHud.of(context)?.showCustomHudViewAndDismiss(
+      enable: true,
+      bottom: 0,
+      hudView: Container(
+        width: double.infinity,
+        height: 350,
+        color: Colors.purple,
+      ),
+    );
   }
 }
 
