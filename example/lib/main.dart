@@ -1,17 +1,18 @@
-import 'package:flt_hc_hud/flt_hc_hud.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flt_hc_hud/flt_hc_hud.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  runApp(const MyApp());
+}
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
-  _MyAppState createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
-
   @override
   void initState() {
     super.initState();
@@ -24,33 +25,24 @@ class _MyAppState extends State<MyApp> {
         padding: EdgeInsets.all(15),
         hSpacing: 10,
         borderRadius: BorderRadius.circular(10),
-        child: Page(_platformVersion),
+        child: Page(),
       ),
     );
   }
 }
 
 class Page extends StatelessWidget {
-  final String platformVersion;
-
-  Page(this.platformVersion);
+  const Page({super.key});
 
   @override
   Widget build(BuildContext context) {
     List<Widget> childs = [];
     for (int i = 0; i < 10; i++) {
-      childs.add(HCHud(
-        height: 200,
-        child: ListCell(i),
-      ));
+      childs.add(HCHud(height: 200, child: ListCell(i)));
     }
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Plugin example app'),
-      ),
-      body: ListView(
-        children: childs,
-      ),
+      appBar: AppBar(title: const Text('Plugin example app')),
+      body: ListView(children: childs),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _onTapBtn(context);
@@ -88,9 +80,9 @@ class Page extends StatelessWidget {
     //   ),
     // );
 
-//     await Future.delayed(Duration(seconds: 2));
-//    HCHud.of(context).showErrorAndDismiss(text: '加载数据异常');
-//     HCHud.of(context)?.dismiss(animated: false);
+    //     await Future.delayed(Duration(seconds: 2));
+    //    HCHud.of(context).showErrorAndDismiss(text: '加载数据异常');
+    //     HCHud.of(context)?.dismiss(animated: false);
 
     // HCHud.of(context)?.showCustomHudViewAndDismiss(
     //   animated: true,
@@ -117,7 +109,7 @@ class Page extends StatelessWidget {
 class ListCell extends StatelessWidget {
   final int index;
 
-  ListCell(this.index);
+  const ListCell(this.index, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -136,9 +128,7 @@ class ListCell extends StatelessWidget {
       child: Container(
         color: Colors.transparent,
         height: 200,
-        child: Center(
-          child: Text('第 $index 行 数据'),
-        ),
+        child: Center(child: Text('第 $index 行 数据')),
       ),
     );
   }
